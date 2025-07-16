@@ -1,0 +1,212 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    background-image: url('game_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1 {
+    color: #FFFFFF; /* White color for the heading */
+    padding: 10px 25px;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
+    border-radius: 8px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#main-game-layout { /* Container for board and sidebar */
+    display: flex;
+    flex-direction: row; /* Arrange children (board and sidebar) in a row */
+    gap: 40px; /* Space between the board and the sidebar */
+    align-items: flex-end; /* Align sidebar to the bottom of the board */
+    margin-top: 20px;
+}
+
+#game-sidebar { /* Container for controls and messages */
+    display: flex;
+    flex-direction: column; /* Stack its children (controls and message) vertically */
+    align-items: flex-end; /* Align contents (controls, messages) to the right within the sidebar */
+    gap: 25px; /* Space between controls and message area */
+    width: 250px; /* Set a fixed width for the sidebar, adjust as needed */
+    flex-shrink: 0; /* Prevents sidebar from shrinking if screen is small */
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    border: 2px solid #333;
+    width: 500px;
+    height: 500px;
+    background-color: #FAF0E6;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.square {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
+/* Make every other square color different for a checkerboard effect */
+.square:nth-child(even) {
+    background-color: #DEB887; /* Sandy brown */
+}
+.square:nth-child(odd) {
+    background-color: #F5F5DC; /* Beige */
+}
+
+/* This makes the colors reverse on every other *row* to create the zig-zag checkerboard pattern */
+#game-board .row-even .square:nth-child(odd) {
+    background-color: #DEB887; /* Sandy brown */
+}
+#game-board .row-even .square:nth-child(even) {
+    background-color: #F5F5DC; /* Beige */
+}
+
+.player {
+    width: 30px;
+    height: 30px;
+    background-color: #FF6347; /* Tomato red color for the player */
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.5s ease-in-out;
+    z-index: 10;
+    border: 2px solid #a03020;
+}
+
+#game-board .snake-head {
+    background-color: #8B0000 !important;
+    color: white !important;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.controls { /* Controls section containing button and text info */
+    display: flex;
+    flex-direction: column; /* Stack the button and paragraphs vertically */
+    gap: 15px; /* Space between button and paragraphs */
+    align-items: flex-end; /* Aligns button and paragraphs to the right within .controls */
+}
+
+.controls p { /* Styling for the label text (e.g., "Current Roll:") */
+    color: #E0E0E0; /* Light grey color for labels */
+    font-weight: bold;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px; /* Added padding for visibility */
+    background-color: rgba(0, 0, 0, 0.2); /* Subtle transparent background for visibility */
+    border-radius: 4px; /* Slightly rounded corners */
+}
+
+#roll-dice-btn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#roll-dice-btn:hover {
+    background-color: #45a049;
+}
+
+#roll-dice-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#current-roll, #player-position {
+    font-weight: bold;
+    color: #FFD700; /* GOLD color for the numbers */
+    font-size: 1.2em;
+    padding: 8px 15px; /* Padding for the number itself */
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background for the number */
+    border-radius: 5px;
+    min-width: 40px;
+    display: inline-block;
+    text-align: center;
+}
+
+#message-area {
+    font-size: 1.15em;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 12px 20px;
+    background-color: rgba(179, 36, 36, 0.7); /* Red transparent background for messages */
+    border-radius: 8px;
+    text-align: center;
+    width: 100%; /* Make it fill the width of its parent (#game-sidebar) */
+    box-sizing: border-box;
+}
+
+/* Quiz Modal Styles */
+#quiz-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+#quiz-modal.hidden {
+    display: none;
+}
+
+.quiz-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+#quiz-question {
+    font-size: 1.5em;
+    margin-bottom: 25px;
+    color: #333; /* Dark grey color for the question text on white background */
+}
+
+#quiz-options button {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+    padding: 12px 20px;
+    font-size: 1.1em;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    #quiz-timer {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #e74c3c; /* Red color for the timer */
+    margin-bottom: 15px;
+    text-align: center;
+    /* This ensures it's hidden when not active */
+    display: none; 
+}
