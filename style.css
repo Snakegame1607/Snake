@@ -210,3 +210,57 @@ h1 {
     /* This ensures it's hidden when not active */
     display: none; 
 }
+/* Default styles (for larger screens first, or general styles) */
+body {
+    font-size: 16px;
+    /* ... other default styles ... */
+}
+
+.game-container {
+    width: 800px; /* Default width */
+    /* ... */
+}
+
+/* --- Media Queries for smaller screens --- */
+
+/* Styles for screens smaller than 768px (e.g., tablets in portrait, large phones) */
+@media (max-width: 768px) {
+    .game-container {
+        width: 95%; /* Make it take up most of the screen width */
+        margin: 0 auto; /* Center it */
+    }
+    body {
+        font-size: 14px; /* Adjust font size */
+    }
+    /* Adjust other elements as needed */
+}
+
+/* Styles for screens smaller than 480px (e.g., most phones) */
+@media (max-width: 480px) {
+    .game-container {
+        width: 100%; /* Make it full width */
+        padding: 10px; /* Add some padding */
+    }
+    body {
+        font-size: 12px;
+    }
+    /* Maybe reduce padding on elements, adjust image sizes, stack elements vertically */
+    .question-box {
+        padding: 15px;
+        font-size: 18px;
+    }
+    .answer-button {
+        padding: 8px 15px;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+    img.game-background { /* If your background image is an <img> tag */
+        width: 100%;
+        height: auto;
+    }
+}
+img {
+    max-width: 100%; /* Images will not exceed their container's width */
+    height: auto;    /* Maintain aspect ratio */
+    display: block;  /* Remove extra space below images */
+}
