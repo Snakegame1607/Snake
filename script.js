@@ -143,7 +143,7 @@ const quizData = [
         "answer": "Hemotoxic/Cytotoxic"
     },
     {
-        "question": "What is the common name for the snake species '$Echis \\text{ } carinatus$'?",
+        "question": "What is the common name for the snake species 'Echis carinatus'?",
         "options": ["Indian Cobra", "Common Krait", "Russell's Viper", "Saw-scaled Viper"],
         "answer": "Saw-scaled Viper"
     },
