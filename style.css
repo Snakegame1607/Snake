@@ -1,4 +1,3 @@
-/* General body styles - remain mostly the same */
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -10,93 +9,83 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    min-height: 100vh; /* Ensure body takes full viewport height for centering */
-    overflow-x: hidden; /* Prevent horizontal scrollbar from overflow */
 }
 
 h1 {
-    color: #FFFFFF;
+    color: #FFFFFF; /* White color for the heading */
     padding: 10px 25px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
     border-radius: 8px;
     margin-top: 30px;
     margin-bottom: 30px;
-    text-align: center; /* Center text for smaller screens */
 }
 
-/* Images should always be responsive by default */
-img {
-    max-width: 100%; /* Images will not exceed their container's width */
-    height: auto;    /* Maintain aspect ratio */
-    display: block;  /* Remove extra space below images */
-}
-
-/* Main game layout container */
-#main-game-layout {
+#main-game-layout { /* Container for board and sidebar */
     display: flex;
-    flex-direction: row; /* Default: board and sidebar in a row */
-    gap: 40px;
-    align-items: flex-start; /* Align items to the top (board and sidebar) */
+    flex-direction: row; /* Arrange children (board and sidebar) in a row */
+    gap: 40px; /* Space between the board and the sidebar */
+    align-items: flex-end; /* Align sidebar to the bottom of the board */
     margin-top: 20px;
-    max-width: 1000px; /* Max width for the entire game layout */
-    width: 95%; /* Make it flexible */
-    box-sizing: border-box; /* Include padding/border in element's total width/height */
-    padding: 10px; /* Add some padding around the layout */
 }
 
-/* Game Board */
+#game-sidebar { /* Container for controls and messages */
+    display: flex;
+    flex-direction: column; /* Stack its children (controls and message) vertically */
+    align-items: flex-end; /* Align contents (controls, messages) to the right within the sidebar */
+    gap: 25px; /* Space between controls and message area */
+    width: 250px; /* Set a fixed width for the sidebar, adjust as needed */
+    flex-shrink: 0; /* Prevents sidebar from shrinking if screen is small */
+}
+
 #game-board {
     display: grid;
-    /* Calculate square size based on available width, 10 columns */
-    /* Using 'minmax(0, 1fr)' for flexible columns */
-    grid-template-columns: repeat(10, minmax(0, 1fr));
-    grid-template-rows: repeat(10, minmax(0, 1fr)); /* Rows will also be flexible */
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
     border: 2px solid #333;
-    /* Remove fixed width/height, use aspect ratio or flexible sizing */
-    width: 100%; /* Take full width of its parent (#main-game-layout) */
-    padding-bottom: 100%; /* Creates a square aspect ratio (1:1) based on width */
-    position: relative; /* For player positioning */
+    width: 500px;
+    height: 500px;
     background-color: #FAF0E6;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    box-sizing: border-box;
+    position: relative;
 }
 
-/* Individual Squares - now flexible based on grid */
 .square {
-    /* Remove fixed width/height */
+    width: 50px;
+    height: 50px;
     border: 1px solid #ccc;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 0.9em; /* Use relative units */
+    font-size: 0.9em;
     box-sizing: border-box;
-    /* Ensure content fits */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-/* Checkerboard effect */
-.square:nth-child(even) { background-color: #DEB887; }
-.square:nth-child(odd) { background-color: #F5F5DC; }
-#game-board .row-even .square:nth-child(odd) { background-color: #DEB887; }
-#game-board .row-even .square:nth-child(even) { background-color: #F5F5DC; }
+/* Make every other square color different for a checkerboard effect */
+.square:nth-child(even) {
+    background-color: #DEB887; /* Sandy brown */
+}
+.square:nth-child(odd) {
+    background-color: #F5F5DC; /* Beige */
+}
 
-/* Player */
+/* This makes the colors reverse on every other *row* to create the zig-zag checkerboard pattern */
+#game-board .row-even .square:nth-child(odd) {
+    background-color: #DEB887; /* Sandy brown */
+}
+#game-board .row-even .square:nth-child(even) {
+    background-color: #F5F5DC; /* Beige */
+}
+
 .player {
-    width: 30%; /* Make player size relative to square */
-    height: 30%;
-    background-color: #FF6347;
+    width: 30px;
+    height: 30px;
+    background-color: #FF6347; /* Tomato red color for the player */
     border-radius: 50%;
-    position: absolute; /* Positioned relative to the board */
+    position: absolute;
     transition: all 0.5s ease-in-out;
     z-index: 10;
     border: 2px solid #a03020;
-    /* Center player within its square */
-    transform: translate(-50%, -50%);
-    left: 50%;
-    top: 50%;
 }
 
 #game-board .snake-head {
@@ -105,39 +94,23 @@ img {
     box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
 }
 
-/* Game Sidebar */
-#game-sidebar {
+.controls { /* Controls section containing button and text info */
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 25px;
-    width: 250px; /* Default width */
-    flex-shrink: 0;
-    box-sizing: border-box;
-    padding: 10px;
+    flex-direction: column; /* Stack the button and paragraphs vertically */
+    gap: 15px; /* Space between button and paragraphs */
+    align-items: flex-end; /* Aligns button and paragraphs to the right within .controls */
 }
 
-.controls {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: flex-end;
-    width: 100%; /* Take full width of sidebar */
-}
-
-.controls p {
-    color: #E0E0E0;
+.controls p { /* Styling for the label text (e.g., "Current Roll:") */
+    color: #E0E0E0; /* Light grey color for labels */
     font-weight: bold;
     font-size: 1.1em;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 5px 10px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    width: 100%; /* Ensure text elements fill width */
-    box-sizing: border-box;
-    justify-content: space-between; /* Space out label and value */
+    padding: 5px 10px; /* Added padding for visibility */
+    background-color: rgba(0, 0, 0, 0.2); /* Subtle transparent background for visibility */
+    border-radius: 4px; /* Slightly rounded corners */
 }
 
 #roll-dice-btn {
@@ -149,19 +122,23 @@ img {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%; /* Make button fill width */
-    box-sizing: border-box;
 }
 
-#roll-dice-btn:hover { background-color: #45a049; }
-#roll-dice-btn:disabled { background-color: #cccccc; cursor: not-allowed; }
+#roll-dice-btn:hover {
+    background-color: #45a049;
+}
+
+#roll-dice-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
 
 #current-roll, #player-position {
     font-weight: bold;
-    color: #FFD700;
+    color: #FFD700; /* GOLD color for the numbers */
     font-size: 1.2em;
-    padding: 8px 15px;
-    background-color: rgba(0, 0, 0, 0.4);
+    padding: 8px 15px; /* Padding for the number itself */
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background for the number */
     border-radius: 5px;
     min-width: 40px;
     display: inline-block;
@@ -173,10 +150,10 @@ img {
     color: #FFFFFF;
     font-weight: bold;
     padding: 12px 20px;
-    background-color: rgba(179, 36, 36, 0.7);
+    background-color: rgba(179, 36, 36, 0.7); /* Red transparent background for messages */
     border-radius: 8px;
     text-align: center;
-    width: 100%;
+    width: 100%; /* Make it fill the width of its parent (#game-sidebar) */
     box-sizing: border-box;
 }
 
@@ -194,7 +171,9 @@ img {
     z-index: 100;
 }
 
-#quiz-modal.hidden { display: none; }
+#quiz-modal.hidden {
+    display: none;
+}
 
 .quiz-content {
     background-color: #fff;
@@ -202,15 +181,14 @@ img {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
-    max-width: 500px; /* Use max-width for flexibility */
-    width: 90%; /* Take up 90% of screen width, up to max-width */
-    box-sizing: border-box;
+    max-width: 500px;
+    width: 90%;
 }
 
 #quiz-question {
     font-size: 1.5em;
     margin-bottom: 25px;
-    color: #333;
+    color: #333; /* Dark grey color for the question text on white background */
 }
 
 #quiz-options button {
@@ -223,112 +201,66 @@ img {
     color: white;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-#quiz-options button:hover { background-color: #0056b3; }
-
-/* FIX: Moved #quiz-timer outside #quiz-options button */
-#quiz-timer {
+    #quiz-timer {
     font-size: 1.5em;
     font-weight: bold;
-    color: #e74c3c;
+    color: #e74c3c; /* Red color for the timer */
     margin-bottom: 15px;
     text-align: center;
-    display: none;
+    /* This ensures it's hidden when not active */
+    display: none; 
+}
+/* Default styles (for larger screens first, or general styles) */
+body {
+    font-size: 16px;
+    /* ... other default styles ... */
 }
 
-/* --- Media Queries for responsiveness --- */
-
-/* Styles for screens smaller than 800px (adjust main layout) */
-@media (max-width: 800px) {
-    #main-game-layout {
-        flex-direction: column; /* Stack board and sidebar vertically */
-        align-items: center; /* Center them horizontally */
-        gap: 20px; /* Reduce gap when stacked */
-    }
-
-    #game-sidebar {
-        width: 90%; /* Make sidebar wider on smaller screens */
-        align-items: center; /* Center sidebar content when stacked */
-    }
-
-    .controls {
-        align-items: center; /* Center controls within sidebar */
-    }
-
-    .controls p {
-        justify-content: center; /* Center content of control paragraphs */
-    }
+.game-container {
+    width: 800px; /* Default width */
+    /* ... */
 }
 
-/* Styles for screens smaller than 550px (adjust board and overall sizing) */
-@media (max-width: 550px) {
-    h1 {
-        font-size: 1.8em; /* Make heading smaller */
+/* --- Media Queries for smaller screens --- */
+
+/* Styles for screens smaller than 768px (e.g., tablets in portrait, large phones) */
+@media (max-width: 768px) {
+    .game-container {
+        width: 95%; /* Make it take up most of the screen width */
+        margin: 0 auto; /* Center it */
+    }
+    body {
+        font-size: 14px; /* Adjust font size */
+    }
+    /* Adjust other elements as needed */
+}
+
+/* Styles for screens smaller than 480px (e.g., most phones) */
+@media (max-width: 480px) {
+    .game-container {
+        width: 100%; /* Make it full width */
+        padding: 10px; /* Add some padding */
+    }
+    body {
+        font-size: 12px;
+    }
+    /* Maybe reduce padding on elements, adjust image sizes, stack elements vertically */
+    .question-box {
+        padding: 15px;
+        font-size: 18px;
+    }
+    .answer-button {
         padding: 8px 15px;
-        margin-top: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 8px;
+        font-size: 16px;
     }
-
-    #main-game-layout {
-        width: 100%; /* Take full width on very small screens */
-        padding: 5px;
+    img.game-background { /* If your background image is an <img> tag */
+        width: 100%;
+        height: auto;
     }
-
-    /* Game board and squares will automatically scale due to flexible units */
-    #game-board {
-        padding-bottom: 100%; /* Maintain square aspect ratio */
-        /* No need to change grid-template-columns here as it's already 1fr */
-    }
-
-    .square {
-        font-size: 0.7em; /* Make square numbers smaller */
-    }
-
-    .player {
-        width: 40%; /* Player can be a bit larger relative to smaller squares */
-        height: 40%;
-    }
-
-    #game-sidebar {
-        width: 95%; /* Even wider sidebar on very small screens */
-        padding: 5px;
-    }
-
-    #roll-dice-btn {
-        font-size: 1em; /* Smaller button text */
-        padding: 8px 15px;
-    }
-
-    .controls p {
-        font-size: 0.9em; /* Smaller text for controls */
-        padding: 3px 8px;
-    }
-
-    #current-roll, #player-position {
-        font-size: 1em; /* Smaller numbers */
-        padding: 6px 10px;
-    }
-
-    #message-area {
-        font-size: 1em; /* Smaller message text */
-        padding: 10px 15px;
-    }
-
-    .quiz-content {
-        padding: 20px;
-        max-width: 95%; /* Ensure quiz modal fits */
-    }
-
-    #quiz-question {
-        font-size: 1.2em; /* Smaller quiz question */
-        margin-bottom: 15px;
-    }
-
-    #quiz-options button {
-        width: 90%; /* Wider quiz buttons */
-        padding: 10px 15px;
-        font-size: 1em;
-    }
+}
+img {
+    max-width: 100%; /* Images will not exceed their container's width */
+    height: auto;    /* Maintain aspect ratio */
+    display: block;  /* Remove extra space below images */
 }
