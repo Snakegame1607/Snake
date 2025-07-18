@@ -9,9 +9,6 @@ const quizQuestion = document.getElementById('quiz-question');
 const quizOptions = document.getElementById('quiz-options');
 const quizTimerDisplay = document.getElementById('quiz-timer');
 
-// NEW: Reference to the game container
-const gameContainer = document.getElementById('game-container'); // Make sure you have this div in your HTML
-
 // Game state variables
 const boardSize = 100; // Total number of squares on the board
 let playerPosition = 1; // Player starts at logical square 1
@@ -182,12 +179,6 @@ const quizData = [
     }
 ];
 
-// NEW: Define the game's base (design) resolution
-const BASE_GAME_WIDTH = 1280;
-const BASE_GAME_HEIGHT = 720;
-const GAME_ASPECT_RATIO = BASE_GAME_WIDTH / BASE_GAME_HEIGHT;
-
-
 /**
  * Helper function to map a logical square number (1-100) to its DOM element index (0-99).
  * This is crucial for correctly positioning the player token on the zig-zag board,
@@ -312,42 +303,12 @@ function movePlayerToken() {
 
     if (targetSquare) {
         // Calculate positions relative to the game board
-        // IMPORTANT: These rect values are relative to the viewport.
-        // We need to make sure we're positioning the token relative to gameBoard's
-        // *scaled* internal dimensions.
         const boardRect = gameBoard.getBoundingClientRect();
         const squareRect = targetSquare.getBoundingClientRect();
 
-        // Calculate the scale factor applied to the gameBoard
-        // This is crucial for positioning based on the game's internal coordinates
-        const currentBoardWidth = boardRect.width;
-        const currentBoardHeight = boardRect.height;
-        const scaleX = currentBoardWidth / BASE_GAME_WIDTH;
-        const scaleY = currentBoardHeight / BASE_GAME_HEIGHT;
-        // Since we're maintaining aspect ratio, scaleX and scaleY should be very close.
-        // We'll use scaleX for both, assuming the board is scaled uniformly.
-        const scaleFactor = scaleX; // Or scaleY, they should be the same with proper aspect ratio scaling
-
-        // Get the square's logical position relative to the board's design size
-        // The square's position and size needs to be translated from scaled pixels to base pixels
-        // This makes sure token positioning works regardless of the game board's current visual size.
-        const squareLeftRelativeToBoard = (squareRect.left - boardRect.left);
-        const squareTopRelativeToBoard = (squareRect.top - boardRect.top);
-        const squareWidthScaled = squareRect.width;
-        const squareHeightScaled = squareRect.height;
-
         // Position the token in the center of the target square
-        playerToken.style.left = (squareLeftRelativeToBoard + (squareWidthScaled / 2) - (playerToken.offsetWidth * scaleFactor / 2)) + 'px';
-        playerToken.style.top = (squareTopRelativeToBoard + (squareHeightScaled / 2) - (playerToken.offsetHeight * scaleFactor / 2)) + 'px';
-
-        // Adjust player token size to scale with the board
-        // Assuming playerToken has a base size defined in CSS
-        // You might need to set playerToken width/height to percentages or scale it.
-        // For simplicity, let's just make sure the playerToken scales with the board.
-        // This part might need further refinement based on your player token's original CSS.
-        // If player token is initially designed for BASE_GAME_WIDTH/HEIGHT
-        playerToken.style.width = `${40 * scaleFactor}px`; // Example: If base token width is 40px
-        playerToken.style.height = `${40 * scaleFactor}px`; // Example: If base token height is 40px
+        playerToken.style.left = (squareRect.left - boardRect.left + (squareRect.width / 2) - (playerToken.offsetWidth / 2)) + 'px';
+        playerToken.style.top = (squareRect.top - boardRect.top + (squareRect.height / 2) - (playerToken.offsetHeight / 2)) + 'px';
     }
 }
 
@@ -540,3 +501,12 @@ function hideQuiz() {
     quizTimerDisplay.style.color = '';
 }
 
+
+// Event Listener for the Dice Button
+rollDiceBtn.addEventListener('click', rollDice);
+
+// Initial setup when the page loads
+createBoard(); // Draw the board
+initializePlayerToken(); // Place the player token at the start (logical 1)
+resetQuizPool(); // NEW: Initialize the quiz question pool at the start of the game
+displayMessage("Roll the dice to start!"); // Show initial message
